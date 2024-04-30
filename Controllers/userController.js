@@ -63,7 +63,7 @@ const deleteUsers = async (req, res) => {
       });
     }
     res.status(201).json({
-      message: "User Updated Successfully",
+      message: "User Deleted Successfully",
     });
   } catch (error) {
     res.status(500).json({
