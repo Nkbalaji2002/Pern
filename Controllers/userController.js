@@ -15,14 +15,24 @@ const getUsers = async (req, res) => {
 const addUsers = async (req, res) => {
   try {
     const { name, email } = req.body;
-    const newUser = await userModel.addUsers(name, email);
-    if (!newUser) {
-      res.status(404).json({
-        message: "User Not Found",
+
+    // Validate name and email if necessary
+    if (!name || !email) {
+      return res.status(400).json({
+        message: "Name and email are required fields",
       });
     }
-    res.status(201).json({
-      message: "User Creted Successfully",
+
+    const newUser = await userModel.addUsers(name, email);
+    if (!newUser) {
+      return res.status(500).json({
+        message: "Failed to add user",
+      });
+    }
+
+    // Respond with success message
+    return res.status(201).json({
+      message: "User Created Successfully",
     });
   } catch (error) {
     res.status(500).json({
@@ -36,13 +46,23 @@ const updateUsers = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email } = req.body;
+
+    // Validate name and email if necessary
+    if (!name || !email) {
+      return res.status(400).json({
+        message: "Name and email are required fields",
+      });
+    }
+
     const updateUser = await userModel.updateUsers(id, name, email);
     if (!updateUser) {
       res.status(404).json({
         message: "User Not Found",
       });
     }
-    res.status(201).json({
+
+    // Respond with success message
+    return res.status(200).json({
       message: "User Updated Successfully",
     });
   } catch (error) {
@@ -62,7 +82,7 @@ const deleteUsers = async (req, res) => {
         message: "User Not Found",
       });
     }
-    res.status(201).json({
+    res.status(204).json({
       message: "User Deleted Successfully",
     });
   } catch (error) {
